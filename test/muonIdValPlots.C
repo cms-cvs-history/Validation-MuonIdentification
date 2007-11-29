@@ -10,7 +10,24 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       return;
    }
    d->cd();
-   gROOT->LoadMacro("resolution_fit.cxx");
+   //gROOT->LoadMacro("resolution_fit.cxx");
+   gStyle->SetOptFit(1);
+
+   TList* list = gDirectory->GetListOfKeys();
+   TIterator* iter = list->MakeIterator();
+   TRegexp re("*Pull[dxy]*", kTRUE);
+
+   TKey* key = 0;
+   while(key = (TKey*)iter->Next()) {
+      if (gDirectory->Get(key->GetName())->InheritsFrom(TH1F::Class()) &&
+            (TString(key->GetName()).Index(re) >= 0))
+      {
+         TH1F* h = (TH1F*)gDirectory->Get(key->GetName()) ;
+         h->Fit("gaus", "", "", -2., 2.);
+      }
+   }
+
+   delete iter;
 
    TPRegexp preg("(\\S+).root");
    TString output = ((TObjString*)preg.MatchS(TString(file))->At(1))->GetString();
@@ -88,9 +105,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 4)
          ((TH1F*)gDirectory->Get(Form("hDT%iDx", i+1)))->Draw();
       if (i > 3 && i < 8)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPullx", i-3)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPullx", i-3)))->Draw();
       if (i > 7)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPullxPropErr", i-7)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPullxPropErr", i-7)))->Draw();
    }
    cDTDx->Print(output.Data());
 
@@ -101,9 +118,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 3)
          ((TH1F*)gDirectory->Get(Form("hDT%iDy", i+1)))->Draw();
       if (i > 2 && i < 6)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPully", i-2)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPully", i-2)))->Draw();
       if (i > 5)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPullyPropErr", i-5)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPullyPropErr", i-5)))->Draw();
    }
    cDTDy->Print(output.Data());
 
@@ -114,9 +131,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 4)
          ((TH1F*)gDirectory->Get(Form("hDT%iDdXdZ", i+1)))->Draw();
       if (i > 3 && i < 8)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPulldXdZ", i-3)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPulldXdZ", i-3)))->Draw();
       if (i > 7)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPulldXdZPropErr", i-7)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPulldXdZPropErr", i-7)))->Draw();
    }
    cDTDdXdZ->Print(output.Data());
 
@@ -127,9 +144,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 3)
          ((TH1F*)gDirectory->Get(Form("hDT%iDdYdZ", i+1)))->Draw();
       if (i > 2 && i < 6)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPulldYdZ", i-2)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPulldYdZ", i-2)))->Draw();
       if (i > 5)
-         resolution_fit((TH1*)gDirectory->Get(Form("hDT%iPulldYdZPropErr", i-5)));
+         ((TH1F*)gDirectory->Get(Form("hDT%iPulldYdZPropErr", i-5)))->Draw();
    }
    cDTDdYdZ->Print(output.Data());
 
@@ -163,9 +180,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 4)
          ((TH1F*)gDirectory->Get(Form("hCSC%iDx", i+1)))->Draw();
       if (i > 3 && i < 8)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPullx", i-3)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPullx", i-3)))->Draw();
       if (i > 7)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPullxPropErr", i-7)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPullxPropErr", i-7)))->Draw();
    }
    cCSCDx->Print(output.Data());
 
@@ -176,9 +193,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 4)
          ((TH1F*)gDirectory->Get(Form("hCSC%iDy", i+1)))->Draw();
       if (i > 3 && i < 8)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPully", i-3)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPully", i-3)))->Draw();
       if (i > 7)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPullyPropErr", i-7)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPullyPropErr", i-7)))->Draw();
    }
    cCSCDy->Print(output.Data());
 
@@ -189,9 +206,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 4)
          ((TH1F*)gDirectory->Get(Form("hCSC%iDdXdZ", i+1)))->Draw();
       if (i > 3 && i < 8)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPulldXdZ", i-3)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPulldXdZ", i-3)))->Draw();
       if (i > 7)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPulldXdZPropErr", i-7)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPulldXdZPropErr", i-7)))->Draw();
    }
    cCSCDdXdZ->Print(output.Data());
 
@@ -202,9 +219,9 @@ void muonIdValPlots(char* file, bool doAllChambers = false) {
       if (i < 4)
          ((TH1F*)gDirectory->Get(Form("hCSC%iDdYdZ", i+1)))->Draw();
       if (i > 3 && i < 8)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPulldYdZ", i-3)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPulldYdZ", i-3)))->Draw();
       if (i > 7)
-         resolution_fit((TH1*)gDirectory->Get(Form("hCSC%iPulldYdZPropErr", i-7)));
+         ((TH1F*)gDirectory->Get(Form("hCSC%iPulldYdZPropErr", i-7)))->Draw();
    }
    cCSCDdYdZ->Print(output.Data());
 
