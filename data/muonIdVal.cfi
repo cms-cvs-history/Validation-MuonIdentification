@@ -7,7 +7,7 @@ service = DaqMonitorROOTBackEnd {}
 
 module muonIdVal = MuonIdVal {
    InputTag inputMuonCollection           = muons
-   InputTag inputTrackCollection          = ctfWithMaterialTracks
+   InputTag inputTrackCollection          = generalTracks
    InputTag inputDTRecSegment4DCollection = dt4DSegments
    InputTag inputCSCSegmentCollection     = cscSegments
 
