@@ -3,7 +3,7 @@ include "Geometry/CommonDetUnit/data/globalTrackingGeometry.cfi"
 include "Geometry/CSCGeometry/data/cscGeometry.cfi"
 include "Geometry/MuonNumbering/data/muonNumberingInitialization.cfi"
 
-service = DaqMonitorROOTBackEnd {}
+service = DQMStore {}
 
 module muonIdVal = MuonIdVal {
    InputTag inputMuonCollection           = muons
